@@ -44,7 +44,7 @@ docker run -it \
 
 Launch server in background
 ```sh
-SA_NO_SCRATCH_RECLAIM=1 VLLM_USE_V1=1 VLLM_WORKER_MULTIPROC_METHOD=spawn SAFETENSORS_FAST_GPU=1 vllm serve amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV &
+HSA_NO_SCRATCH_RECLAIM=1 VLLM_USE_V1=1 VLLM_WORKER_MULTIPROC_METHOD=spawn SAFETENSORS_FAST_GPU=1 vllm serve amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV &
 ```
 
 Sed request

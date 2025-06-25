@@ -19,9 +19,5 @@
 
 ## ⭐
 ![DO_4](./assets/DO_4.jpg)
-- Add service PORTs, e.g. 7100 and 8100 for ws201
-
-## ⭐
-![DO_5](./assets/DO_5.jpg)
 - Open a terminal and access the instance IP along with PORTs to connect to the instance
 - Check out GPU status

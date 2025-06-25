@@ -19,8 +19,12 @@
 - (Optional) If you need to allow in/outbound PORTs, click "Networking" and register additional PORTs to the instance
 
 ## ⭐Step 4: Docker Launch
-![DO_4](./assets/DO_4.jpg)
 - Open a terminal and access the instance IP along with PORTs to connect to the instance
+
+```sh
+ssh root@YOUR_OP
+```
+
 - Check out GPU status by "rocm-smi"
 - You can launch a vLLM docker by this command: 
 

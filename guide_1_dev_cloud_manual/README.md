@@ -42,4 +42,26 @@ docker run -it \
   rocm/vllm-dev:nightly_0624_rc2_0624_rc2_20250620
 ```
 
+Launch server in background
+```sh
+SA_NO_SCRATCH_RECLAIM=1 VLLM_USE_V1=1 VLLM_WORKER_MULTIPROC_METHOD=spawn SAFETENSORS_FAST_GPU=1 vllm serve amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV &
+```
+
+Sed request
+```sh
+curl http://localhost:8000/v1/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+        "prompt": "San Francisco is a",
+        "max_tokens": 7,
+        "temperature": 0
+    }'
+```
+
+Expected results
+```sh
+{"id":"cmpl-e672df9a11db4e4f81df9f4482cf94d1","object":"text_completion","created":1750867347,"model":"amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV","choices":[{"index":0,"text":" city that is known for its steep","logprobs":null,"finish_reason":"length","stop_reason":null,"prompt_logprobs":null}],"usage":{"prompt_tokens":5,"total_tokens":12,"completion_tokens":7,"prompt_tokens_details":null},"kv_transfer_params":nul
+```
+
+
 - Additionally, you can access the instance from the Visual Stuido Code

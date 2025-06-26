@@ -19,9 +19,10 @@ Run performance profile (client)
 ```sh
 ./1_bench.sh prof
 ```
-## You will see these performance metrics
-1. Profile dump
+## Now you can visualize GPU kernels 
+profile dump is saved under ./profile/*.pt.trace.json.gz
 ---
+for example, 
 ./profile/09c1eb36108d_137.1750940187968632644.pt.trace.json.gz
 
 In the terminal, scp the dump file to the local machine
@@ -30,7 +31,7 @@ In the terminal, scp the dump file to the local machine
 scp root@YOUR_IP:~/ai_sprint_paris/guide_3_kernel_profile/profile/*.pt.trace.json.gz .
 ```
 
-Open a profile dump visualization tool [Perfetto](https://ui.perfetto.dev/)
+Open a profile visualization tool [Perfetto](https://ui.perfetto.dev/) at the webbrowser
 
 Then you will see CPU-side 1 token decoding activities during decode-only phase
 

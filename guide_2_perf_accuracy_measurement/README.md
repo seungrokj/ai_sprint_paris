@@ -35,10 +35,10 @@ result_Jun26_10_34_48.json
 | median_ttft_ms| median_tpot_ms| median_itl_ms| median_e2el_ms| total_token_throughput|
 | --------------| --------------| -------------| --------------| ----------------------|
 
-2. Accuracy (word_perplexity) Compare PPL against [Officla_score](https://huggingface.co/amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV#evaluation-scores)
+2. Accuracy (word_perplexity) Compare PPL against [Official PPL score](https://huggingface.co/amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV#evaluation-scores)
 ---
 | Tasks  |Version|Filter|n-shot|    Metric     |   |Value |   |Stderr|
 |--------|------:|------|-----:|---------------|---|-----:|---|------|
-|wikitext|      2|none  |     0|bits_per_byte  |↓  |0.5444|±  |   N/A|
-|        |       |none  |     0|byte_perplexity|↓  |1.4584|±  |   N/A|
-|        |       |none  |     0|word_perplexity|↓  |4.1857|±  |   N/A|
+|wikitext|      2|none  |     0|bits_per_byte  |↓  |0.5400|±  |   N/A|
+|        |       |none  |     0|byte_perplexity|↓  |1.4540|±  |   N/A|
+|        |       |none  |     0|word_perplexity|↓  |4.1378|±  |   N/A|

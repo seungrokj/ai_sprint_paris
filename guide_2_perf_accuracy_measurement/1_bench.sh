@@ -23,7 +23,7 @@ if [ $1 == "perf" ] || [ $1 == "all" ] ; then
     do
 	sleep 1
     done
-    echo "INIFO: performance"
+    echo "INFO: performance"
     ISL=128
     OSL=128
     CON=16
@@ -50,7 +50,7 @@ if [ $1 == "accu" ] || [ $1 == "all" ] ; then
     do
 	sleep 1
     done
-    echo "INIFO: accuracy"
+    echo "INFO: accuracy"
     if [ "$(which lm_eval)" == "" ] ; then
 	git clone https://github.com/baberabb/lm-evaluation-harness.git -b wikitext-tokens
 	cd lm-evaluation-harness

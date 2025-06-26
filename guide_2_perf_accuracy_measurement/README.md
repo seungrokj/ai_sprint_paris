@@ -15,15 +15,15 @@ cd guide_2_perf_accuracy_measurement
 ```sh
 ./1_bench.sh server
 ```
-(In the container), Run performance benchmark (client)
+Run performance benchmark (client)
 ```sh
 ./1_bench.sh perf
 ```
-(In the container), Run accuracy benchmark (client)
+Run accuracy benchmark (client)
 ```sh
 ./1_bench.sh accu
 ```
-(In the container), Or, run server & performance and accuracy benchmarks sequentially 
+Or, run server & performance and accuracy benchmarks sequentially 
 ```sh
 ./1_bench.sh all
 ```

@@ -27,7 +27,7 @@ cd guide_2_perf_accuracy_measurement
 ```sh
 ./1_bench.sh all
 ```
-## You will see this performance metrics
+## You will see these performance metrics
 1. Performance
 ---
 result_Jun26_10_34_48.json

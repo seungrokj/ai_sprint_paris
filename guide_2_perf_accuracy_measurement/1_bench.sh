@@ -7,7 +7,6 @@
 mkdir -p results
 MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
 
-
 if [ $1 == "server" ] || [ $1 == "all" ]; then
     echo "INFO: server"
     vllm serve $MODEL \
@@ -53,7 +52,7 @@ if [ $1 == "accu" ] || [ $1 == "all" ] ; then
     done
     echo "INIFO: accuracy"
     if [ "$(which lm_eval)" == "" ] ; then
-	git clone https://github.com/EleutherAI/lm-evaluation-harness.git
+	git clone https://github.com/baberabb/lm-evaluation-harness.git -b wikitext-tokens
 	cd lm-evaluation-harness
 	pip install -e .
 	pip install lm-eval[api]

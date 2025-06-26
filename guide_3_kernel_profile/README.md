@@ -39,5 +39,5 @@ Then you will see CPU-side 1 token decoding activities during decode-only phase
 
 Also, you will see GPU-side 1 layer out of 1 token decoding activities during decode-only phase: These are optimization target kernels
 
-![GPU](./assets/ws_paris_prof_cpu.jpg)
+![GPU](./assets/ws_paris_prof_gpu.jpg)
 

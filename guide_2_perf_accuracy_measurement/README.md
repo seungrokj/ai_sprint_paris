@@ -23,7 +23,7 @@ cd guide_2_perf_accuracy_measurement
 ```sh
 ./1_bench.sh accu
 ```
-(In the container), Or, run server & performance and accuracy client sequentially 
+(In the container), Or, run server & performance and accuracy benchmarks sequentially 
 ```sh
 ./1_bench.sh all
 ```

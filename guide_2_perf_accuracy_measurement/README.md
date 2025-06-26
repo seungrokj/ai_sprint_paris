@@ -16,15 +16,19 @@ Run vllm container
 ./1_bench.sh server
 ```
 
-(In the container), Then run vlm client to check performance
+(In the container), Run performance benchmark (client)
 ```sh
-./1_bench.sh client
+./1_bench.sh perf
 ```
-(In the container), Or, run server & client sequentially 
+(In the container), Run accuracy benchmark (client)
+```sh
+./1_bench.sh perf
+```
+(In the container), Or, run server & performance and accuracy client sequentially 
 ```sh
 ./1_bench.sh all
 ```
-You will see 
+You will see this performance metrics
 
 result_Jun26_10_34_48.json
 
@@ -32,3 +36,10 @@ result_Jun26_10_34_48.json
 | median_ttft_ms| median_tpot_ms| median_itl_ms| median_e2el_ms| total_token_throughput|
 | --------------| --------------| -------------| --------------| ----------------------|
 
+Or, you will see this accuracy metrics
+
+| Tasks  |Version|Filter|n-shot|    Metric     |   |Value |   |Stderr|
+|--------|------:|------|-----:|---------------|---|-----:|---|------|
+|wikitext|      2|none  |     0|bits_per_byte  |↓  |0.4956|±  |   N/A|
+|        |       |none  |     0|byte_perplexity|↓  |1.4100|±  |   N/A|
+|        |       |none  |     0|word_perplexity|↓  |6.2787|±  |   N/A|

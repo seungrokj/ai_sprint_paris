@@ -1,6 +1,7 @@
 #Usage:
 # ./1_bench.sh server
-# ./1_bench.sh client
+# ./1_bench.sh perf
+# ./1_bench.sh accu
 # ./1_bench.sh all
 
 mkdir -p results
@@ -18,12 +19,12 @@ if [ $1 == "server" ] || [ $1 == "all" ]; then
 fi
 
 
-if [ $1 == "client" ] || [ $1 == "all" ] ; then
+if [ $1 == "perf" ] || [ $1 == "all" ] ; then
     until curl -s localhost:8000/v1/models > /dev/null; 
     do
 	sleep 1
     done
-    echo "INIFO: client"
+    echo "INIFO: performance"
     ISL=128
     OSL=128
     CON=16
@@ -43,4 +44,19 @@ if [ $1 == "client" ] || [ $1 == "all" ] ; then
         --result-filename $rpt \
         --percentile-metrics ttft,tpot,itl,e2el
     python show_results.py 
+fi
+
+if [ $1 == "accu" ] || [ $1 == "all" ] ; then
+    until curl -s localhost:8000/v1/models > /dev/null; 
+    do
+	sleep 1
+    done
+    echo "INIFO: accuracy"
+    if [ "$(which lm_eval)" == "" ] ; then
+	git clone https://github.com/EleutherAI/lm-evaluation-harness.git
+	cd lm-evaluation-harness
+	pip install -e .
+	pip install lm-eval[api]
+    fi
+    lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext
 fi

@@ -1,20 +1,19 @@
 #Usage:
 # ./1_bench.sh server
 # ./1_bench.sh perf
-# ./1_bench.sh accu
+# ./1_bench.sh accuracy
 # ./1_bench.sh all
 
 mkdir -p results
 MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
 
-if [ $1 == "server" ] || [ $1 == "all" ]; then
+if [ $1 == "server" ]; then
     echo "INFO: server"
     vllm serve $MODEL \
 	--disable-log-requests \
 	--no-enable-prefix-caching \
 	--kv_cache_dtype fp8 \
-	--compilation-config '{"full_cuda_graph": true}' \
-	&
+	--compilation-config '{"full_cuda_graph": true}'
 fi
 
 
@@ -24,18 +23,18 @@ if [ $1 == "perf" ] || [ $1 == "all" ] ; then
 	sleep 1
     done
     echo "INFO: performance"
-    ISL=128
-    OSL=128
-    CON=16
+    INPUT_LENGTH=128
+    OUTPUT_LENGTH=128
+    CONCURRENT=16
     date=$(date +'%b%d_%H_%M_%S')
     rpt=result_${date}.json
     python /app/vllm/benchmarks/benchmark_serving.py \
         --model $MODEL \
         --dataset-name random \
-        --random-input-len $ISL \
-        --random-output-len $OSL \
-        --num-prompts $(( $CON * 2 )) \
-        --max-concurrency $CON \
+        --random-input-len ${INPUT_LENGTH} \
+        --random-output-len ${OUTPUT_LENGTH} \
+        --num-prompts $(( $CONCURRENT * 2 )) \
+        --max-concurrency $CONCURRENT \
         --request-rate inf \
         --ignore-eos \
         --save-result \
@@ -45,7 +44,9 @@ if [ $1 == "perf" ] || [ $1 == "all" ] ; then
     python show_results.py 
 fi
 
-if [ $1 == "accu" ] || [ $1 == "all" ] ; then
+
+# TODO: do not use 8 months old baberabb/lm-evaluation-harness/wikitext-tokens
+if [ $1 == "accuracy" ] || [ $1 == "all" ] ; then
     until curl -s localhost:8000/v1/models > /dev/null; 
     do
 	sleep 1

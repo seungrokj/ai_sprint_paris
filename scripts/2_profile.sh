@@ -1,19 +1,17 @@
 #Usage:
-# ./1_profile.sh server
-# ./1_profile.sh prof
+# ./2_profile.sh server
+# ./2_profile.sh prof
 
 mkdir -p results
 MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
 
 if [ $1 == "server" ] || [ $1 == "all" ]; then
     echo "INFO: server"
-    VLLM_TORCH_PROFILER_DIR=./profile \
     vllm serve $MODEL \
 	--disable-log-requests \
 	--no-enable-prefix-caching \
 	--kv_cache_dtype fp8 \
-	--compilation-config '{"full_cuda_graph": true}' \
-	&
+	--compilation-config '{"full_cuda_graph": true}'
 fi
 
 
@@ -23,18 +21,18 @@ if [ $1 == "prof" ] || [ $1 == "all" ] ; then
 	sleep 1
     done
     echo "INIFO: performance"
-    ISL=128
-    OSL=10
-    CON=16
+    INPUT_LENGTH=128
+    OUTPUT_LENGTH=10
+    CONCURRENT=16
     date=$(date +'%b%d_%H_%M_%S')
     rpt=result_${date}.json
     python /app/vllm/benchmarks/benchmark_serving.py \
         --model $MODEL \
         --dataset-name random \
-        --random-input-len $ISL \
-        --random-output-len $OSL \
-        --num-prompts $(( $CON * 2 )) \
-        --max-concurrency $CON \
+        --random-input-len ${INPUT_LENGTH} \
+        --random-output-len ${OUTPUT_LENGTH} \
+        --num-prompts $(( $CONCURRENT * 2 )) \
+        --max-concurrency $CONCURRENT \
         --request-rate inf \
         --ignore-eos \
         --save-result \

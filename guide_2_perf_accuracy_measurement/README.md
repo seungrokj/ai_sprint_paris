@@ -1,32 +1,20 @@
 # Running vllm online serving benchmark
 
+> [!NOTE]  
+> Scripts referred throughout this guide are available at https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts.
+
 First, clone the repo
 ```sh
 git clone git clone https://github.com/seungrokj/ai_sprint_paris
-cd guide_2_perf_accuracy_measurement
+cd ai_sprint_paris/scripts
 ```
-
-## Clone vLLM for local development
-
-```bash
-git clone https://github.com/vllm-project/vllm.git
-```
-
 
 ## Start the development and evaluation container
 
-This script will [start a docker container](https://github.com/seungrokj/ai_sprint_paris/blob/main/guide_2_perf_accuracy_measurement/0_container.sh) with vllm pre-installed, and mounts your local vLLM clone into `/vllm-dev` in the container. The container runs the image `rocm/vllm-dev:nightly_0610_rc2_0610_rc2_20250605`.
+This script will [start a docker container](https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts/0_container.sh) with vllm pre-installed, and mounts your local vLLM clone into `/vllm-dev` in the container. The container runs the image `rocm/vllm-dev:nightly_0610_rc2_0610_rc2_20250605`.
 
 ```sh
 ./0_container.sh
-```
-
-## Install your vllm version
-
-```bash
-pip uninstall vllm
-cd /vllm-dev
-python setup.py develop
 ```
 
 ## Attach an other terminal to the running container

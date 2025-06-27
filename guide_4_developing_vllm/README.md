@@ -1,12 +1,31 @@
-# Getting started developing on top of vLLM 
+# Getting started developing on top of vLLM
+
+> [!NOTE]  
+> Scripts referred throughout this guide are available at https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts.
+
+First, clone the repo
+
+```sh
+git clone git clone https://github.com/seungrokj/ai_sprint_paris
+cd ai_sprint_paris/scripts
+```
 
 We suggest you to refer to https://github.com/seungrokj/ai_sprint_paris/tree/main/guide_2_perf_accuracy_measurement first. Reference bash scripts to launch a docker container to develop from, and commands to evaluate latency, throughput, accuracy are provided.
 
 This guide gives a few more details to simplify development.
 
-## Install your vllm version
 
-The vLLM docker container launch script provided at https://github.com/seungrokj/ai_sprint_paris/blob/main/guide_2_perf_accuracy_measurement/0_container.sh mounts a local `${PWD}/vllm` into `/vllm-dev` in the container (`-v ${PWD}/vllm:/vllm-dev`). This is to ease development e.g. through remote VS Code usage.
+## Clone vLLM for local development
+
+```bash
+git clone https://github.com/vllm-project/vllm.git
+```
+
+## Install your vllm version instead of the provided reference
+
+The vLLM docker container already has a reference `vllm` installed, which is used as a baseline for evaluation. However, it is not practical to modify it locally.
+
+Thus, the vLLM docker container launch script provided at https://github.com/seungrokj/ai_sprint_paris/blob/main/guide_2_perf_accuracy_measurement/0_container.sh mounts a local `${PWD}/vllm` into `/vllm-dev` in the container (`-v ${PWD}/vllm:/vllm-dev`). This is to ease development e.g. through remote VS Code usage.
 
 Once in the container, you can run
 
@@ -58,3 +77,12 @@ In our experience, if you modify vLLM version and/or kernels, it can be a good p
 rm -r vllm/*.so
 rm -r ./build
 ```
+
+## References
+
+AMD Instinct MI300X GPU uses the CDNA3 architecture. Its Instruction Set Architecture is a good reference: https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/instruction-set-architectures/amd-instinct-mi300-cdna3-instruction-set-architecture.pdf
+
+External AMD libraries that are used in the ROCm distribution of vLLM are good references too:
+
+* AITER: https://github.com/ROCm/aiter
+* Composable Kernel: https://github.com/ROCm/composable_kernel

@@ -54,7 +54,7 @@ Profile dump is saved under `./profile/*.pt.trace.json.gz`, for example `./profi
 In the terminal, scp the profile dump file to your local machine:
 
 ```sh
-scp root@YOUR_IP:~/ai_sprint_paris/guide_3_kernel_profile/profile/*.pt.trace.json.gz .
+scp root@YOUR_IP:/workspace/profile/*.pt.trace.json.gz .
 ```
 
 Open a profile visualization tool [Perfetto](https://ui.perfetto.dev/) in your web browser and load the trace there.

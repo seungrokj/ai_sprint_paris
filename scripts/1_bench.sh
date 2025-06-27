@@ -2,13 +2,15 @@
 # ./1_bench.sh server
 # ./1_bench.sh perf
 # ./1_bench.sh accuracy
-# ./1_bench.sh all
+# ./1_bench.sh profile
+# ./1_bench.sh all (perf + accuracy + profile)
 
 mkdir -p results
 MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
 
 if [ $1 == "server" ]; then
     echo "INFO: server"
+    VLLM_TORCH_PROFILER_DIR=./profile \
     vllm serve $MODEL \
 	--disable-log-requests \
 	--no-enable-prefix-caching \
@@ -59,4 +61,31 @@ if [ $1 == "accuracy" ] || [ $1 == "all" ] ; then
 	pip install lm-eval[api]
     fi
     lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext
+fi
+
+if [ $1 == "prof" ] || [ $1 == "all" ] ; then
+    until curl -s localhost:8000/v1/models > /dev/null; 
+    do
+	sleep 1
+    done
+    echo "INIFO: performance"
+    INPUT_LENGTH=128
+    OUTPUT_LENGTH=10
+    CONCURRENT=16
+    date=$(date +'%b%d_%H_%M_%S')
+    rpt=result_${date}.json
+    python /vllm-dev/benchmarks/benchmark_serving.py \
+        --model $MODEL \
+        --dataset-name random \
+        --random-input-len ${INPUT_LENGTH} \
+        --random-output-len ${OUTPUT_LENGTH} \
+        --num-prompts $(( $CONCURRENT * 2 )) \
+        --max-concurrency $CONCURRENT \
+        --request-rate inf \
+        --ignore-eos \
+        --save-result \
+        --profile \
+        --result-dir ./results_with_profile/ \
+        --result-filename $rpt \
+        --percentile-metrics ttft,tpot,itl,e2el
 fi

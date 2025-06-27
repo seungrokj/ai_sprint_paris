@@ -21,13 +21,18 @@ cd ai_sprint_paris/scripts
 
 Once the docker container is started, you should should see the scripts from https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts mounted into the container at `/workspace`.
 
-## Start vllm server
+
+## Profiling with PyTorch Profiler
+
+Reference: https://docs.vllm.ai/en/latest/contributing/profiling.html#profile-with-pytorch-profiler
+
+### Start vllm server
 
 ```sh
 VLLM_TORCH_PROFILER_DIR=./profile ./1_bench.sh server
 ```
 
-## Attach an other terminal to the running container
+### Attach an other terminal to the running container
 
 We recommend you to use multiple terminals (or termux, or equivalent) `ssh`ed into your MI300 VM.
 
@@ -39,7 +44,7 @@ docker exec -it vllm-container /bin/bash
 
 to log interactively into the running container in an other shell.
 
-## Run profiling
+### Run profiling
 
 Run performance profile (client)
 
@@ -47,7 +52,7 @@ Run performance profile (client)
 ./1_bench.sh profile
 ```
 
-## Visualizing the profiling trace
+### Visualizing the profiling trace
 
 Profile dump is saved under `./profile/*.pt.trace.json.gz`, for example `./profile/09c1eb36108d_137.1750940187968632644.pt.trace.json.gz`.
 
@@ -67,3 +72,30 @@ Also, you will see GPU-side 1 layer out of 1 token decoding activities during de
 
 ![GPU](./assets/ws_paris_prof_gpu.jpg)
 
+## Profiling individual kernels with ROCm Compute Profiler (omniperf)
+
+Reference: https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/
+
+To display profile results, both a CLI and UI are available:
+* https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/how-to/analyze/cli.html
+* https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/how-to/analyze/standalone-gui.html
+
+In case you'd like to use the UI, it might be easier to dump the profile data in your local computer.
+
+TODO: test it again & share workflow
+
+## Profiling with RocmProfileData
+
+ROCm Profile Data is a collection of tools for tracing and analyzing gpu related activity on a system. This is represented by a timeline of api calls, app log messages, async gpu operations, and related interactions/dependencies.
+
+References:
+* https://rocm.blogs.amd.com/software-tools-optimization/kernel-analysis-deep/README.html
+* https://github.com/ROCm/vllm/tree/main/benchmarks/profiling
+
+TODO: test it & see if it is worth it, any difference with torch profiler?
+
+## Profiling with ROCm Systems Profiler
+
+Reference: https://rocm.docs.amd.com/projects/rocprofiler-systems/en/latest/index.html
+
+TODO: test it and see if it is worth it to include here / any difference with torch profiler.

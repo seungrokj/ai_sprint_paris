@@ -10,6 +10,21 @@ cd guide_2_perf_accuracy_measurement
 ```sh
 ./0_container.sh
 ```
+## Now let's remove existing vllm in the container and rebuild the latest upstream vllm again
+---
+```sh
+# Check current vllm version
+pip list | grep vllm 
+
+# Rebuild vllm
+pip uninstall vllm -y
+git clone https://github.com/vllm-project/vllm.git -b main
+cd vllm/
+pip install -e .
+export PYTORCH_ROCM_ARCH=gfx942
+python setup.py develop
+cd ..
+```
 ## Run vllm server & benchmarks (In the container)
 ---
 ```sh

@@ -22,7 +22,7 @@ git clone https://github.com/vllm-project/vllm.git
 
 ## Start the vLLM development and evaluation docker container
 
-This script will [start a docker container](https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts/0_container.sh) with vllm pre-installed, and mounts your local vLLM clone into `/vllm-dev` in the container. The container runs the image `rocm/vllm-dev:nightly_0610_rc2_0610_rc2_20250605`.
+This script will [start a docker container](https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts/0_container.sh) with vllm pre-installed. The container runs the image `rocm/vllm-dev:nightly_0610_rc2_0610_rc2_20250605`.
 
 ```sh
 cd ai_sprint_paris/scripts
@@ -45,7 +45,7 @@ cd /vllm-dev
 python setup.py develop
 ```
 
-to install your editable vLLM version.
+to install your editable vLLM version. Modifications done from the VM on vLLM's Python source code will then be immediately be visible in the container, and when rerunning `vllm serve`, or `1_bench.sh` and `2_profile` scripts.
 
 ## Available ROCm dependencies
 
@@ -90,7 +90,16 @@ rm -r ./build
 
 ## References
 
+### vLLM
+
+* Documentation: https://docs.vllm.ai/en/latest/
+* Researching issues and PRs in https://github.com/vllm-project/vllm can be helpful.
+
+### AMD Instinct MI300X
+
 AMD Instinct MI300X GPU uses the CDNA3 architecture. Its Instruction Set Architecture is a good reference: https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/instruction-set-architectures/amd-instinct-mi300-cdna3-instruction-set-architecture.pdf
+
+### ROCm and AMD libraries
 
 External AMD libraries that are used in the ROCm distribution of vLLM are good references too:
 

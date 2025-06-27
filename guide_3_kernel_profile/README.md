@@ -15,14 +15,29 @@ cd ai_sprint_paris/scripts
 This script will [start a docker container](https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts/0_container.sh) with vllm pre-installed, and mounts your local vLLM clone into `/vllm-dev` in the container. The container runs the image `rocm/vllm-dev:nightly_0610_rc2_0610_rc2_20250605`.
 
 ```sh
+cd ai_sprint_paris/scripts
 ./0_container.sh
 ```
+
+Once the docker container is started, you should should see the scripts from https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts mounted into the container at `/workspace`.
 
 ## Start vllm server
 
 ```sh
 VLLM_TORCH_PROFILER_DIR=./profile ./2_profile.sh server
 ```
+
+## Attach an other terminal to the running container
+
+We recommend you to use multiple terminals (or termux, or equivalent) `ssh`ed into your MI300 VM.
+
+Once logged into the VM and once vLLM container is started (previous step), you can run:
+
+```bash
+docker exec -it vllm-container /bin/bash
+```
+
+to log interactively into the running container in an other shell.
 
 ## Run profiling
 

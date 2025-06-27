@@ -28,7 +28,7 @@ if [ $1 == "perf" ] || [ $1 == "all" ] ; then
     CONCURRENT=16
     date=$(date +'%b%d_%H_%M_%S')
     rpt=result_${date}.json
-    python /app/vllm/benchmarks/benchmark_serving.py \
+    python /vllm-dev/benchmarks/benchmark_serving.py \
         --model $MODEL \
         --dataset-name random \
         --random-input-len ${INPUT_LENGTH} \

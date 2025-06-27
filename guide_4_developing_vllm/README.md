@@ -14,14 +14,24 @@ We suggest you to refer to https://github.com/seungrokj/ai_sprint_paris/tree/mai
 
 This guide gives a few more details to simplify development.
 
-
-## Clone vLLM for local development
+## Clone vLLM for local development in the devcloud VM
 
 ```bash
 git clone https://github.com/vllm-project/vllm.git
 ```
 
-## Install your vLLM local version instead of the provided reference
+## Start the vLLM development and evaluation docker container
+
+This script will [start a docker container](https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts/0_container.sh) with vllm pre-installed, and mounts your local vLLM clone into `/vllm-dev` in the container. The container runs the image `rocm/vllm-dev:nightly_0610_rc2_0610_rc2_20250605`.
+
+```sh
+cd ai_sprint_paris/scripts
+./0_container.sh
+```
+
+Once the docker container is started, you should should see the scripts from https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts mounted into the container at `/workspace`.
+
+## Install your vLLM local version instead of the provided reference in the docker container
 
 The vLLM docker container already has a reference `vllm` installed, which is used as a baseline for evaluation. However, it is not practical to modify it locally.
 

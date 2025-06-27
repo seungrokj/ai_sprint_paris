@@ -25,7 +25,7 @@ docker run \
     -e VLLM_V1_USE_PREFILL_DECODE_ATTENTION=1 \
     -v "$PWD/.hf_cache/":/root/.cache/huggingface/hub/ \
     -v "$PWD/.vllm_cache/":/root/.cache/vllm/ \
-    -v "$PWD":/workspace/ \
+    -v "$PWD":/workspace \
     -v ${PWD}/vllm:/vllm-dev \
     -w /workspace \
     $DOCKER_IMG 

@@ -10,7 +10,6 @@ MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
 
 if [ $1 == "server" ]; then
     echo "INFO: server"
-    VLLM_TORCH_PROFILER_DIR=./profile \
     vllm serve $MODEL \
 	--disable-log-requests \
 	--no-enable-prefix-caching \
@@ -63,7 +62,7 @@ if [ $1 == "accuracy" ] || [ $1 == "all" ] ; then
     lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext
 fi
 
-if [ $1 == "prof" ] || [ $1 == "all" ] ; then
+if [ $1 == "profile" ] || [ $1 == "all" ] ; then
     until curl -s localhost:8000/v1/models > /dev/null; 
     do
 	sleep 1

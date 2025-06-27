@@ -24,7 +24,7 @@ Once the docker container is started, you should should see the scripts from htt
 ## Start vllm server
 
 ```sh
-VLLM_TORCH_PROFILER_DIR=./profile ./2_profile.sh server
+VLLM_TORCH_PROFILER_DIR=./profile ./1_bench.sh server
 ```
 
 ## Attach an other terminal to the running container
@@ -44,7 +44,7 @@ to log interactively into the running container in an other shell.
 Run performance profile (client)
 
 ```sh
-./2_profile.sh prof
+./1_bench.sh profile
 ```
 
 ## Visualizing the profiling trace

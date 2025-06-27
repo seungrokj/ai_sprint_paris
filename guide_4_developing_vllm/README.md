@@ -21,7 +21,7 @@ This guide gives a few more details to simplify development.
 git clone https://github.com/vllm-project/vllm.git
 ```
 
-## Install your vllm version instead of the provided reference
+## Install your vLLM local version instead of the provided reference
 
 The vLLM docker container already has a reference `vllm` installed, which is used as a baseline for evaluation. However, it is not practical to modify it locally.
 

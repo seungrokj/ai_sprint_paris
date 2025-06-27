@@ -9,7 +9,7 @@ git clone git clone https://github.com/seungrokj/ai_sprint_paris
 cd ai_sprint_paris/scripts
 ```
 
-## Start the development and evaluation container
+## Start the vLLM development and evaluation docker container
 
 This script will [start a docker container](https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts/0_container.sh) with vllm pre-installed, and mounts your local vLLM clone into `/vllm-dev` in the container. The container runs the image `rocm/vllm-dev:nightly_0610_rc2_0610_rc2_20250605`.
 

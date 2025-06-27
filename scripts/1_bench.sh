@@ -23,18 +23,18 @@ if [ $1 == "perf" ] || [ $1 == "all" ] ; then
 	sleep 1
     done
     echo "INFO: performance"
-    ISL=128
-    OSL=128
-    CON=16
+    INPUT_LENGTH=128
+    OUTPUT_LENGTH=128
+    CONCURRENT=16
     date=$(date +'%b%d_%H_%M_%S')
     rpt=result_${date}.json
     python /app/vllm/benchmarks/benchmark_serving.py \
         --model $MODEL \
         --dataset-name random \
-        --random-input-len $ISL \
-        --random-output-len $OSL \
-        --num-prompts $(( $CON * 2 )) \
-        --max-concurrency $CON \
+        --random-input-len ${INPUT_LENGTH} \
+        --random-output-len ${OUTPUT_LENGTH} \
+        --num-prompts $(( $CONCURRENT * 2 )) \
+        --max-concurrency $CONCURRENT \
         --request-rate inf \
         --ignore-eos \
         --save-result \

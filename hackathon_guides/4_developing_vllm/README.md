@@ -10,7 +10,7 @@ git clone git clone https://github.com/seungrokj/ai_sprint_paris
 cd ai_sprint_paris/scripts
 ```
 
-We suggest you to refer to https://github.com/seungrokj/ai_sprint_paris/tree/main/guide_2_perf_accuracy_measurement first. Reference bash scripts to launch a docker container to develop from, and commands to evaluate latency, throughput, accuracy are provided.
+We suggest you to refer to https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/2_perf_accuracy_measurement first. Reference bash scripts to launch a docker container to develop from, and commands to evaluate latency, throughput, accuracy are provided.
 
 This guide gives a few more details to simplify development.
 
@@ -35,7 +35,7 @@ Once the docker container is started, you should should see the scripts from htt
 
 The vLLM docker container already has a reference `vllm` installed, which is used as a baseline for evaluation. However, it is not practical to modify it locally.
 
-Thus, the vLLM docker container launch script provided at https://github.com/seungrokj/ai_sprint_paris/blob/main/guide_2_perf_accuracy_measurement/0_container.sh mounts a local `${PWD}/vllm` into `/vllm-dev` in the container (`-v ${PWD}/vllm:/vllm-dev`). This is to ease development e.g. through remote VS Code usage.
+Thus, the vLLM docker container launch script provided at https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts/0_container.sh mounts a local `${PWD}/vllm` into `/vllm-dev` in the container (`-v ${PWD}/vllm:/vllm-dev`). This is to ease development e.g. through remote VS Code usage.
 
 Once in the container, you can run
 

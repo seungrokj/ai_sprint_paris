@@ -1,20 +1,19 @@
 #Usage:
 # ./1_bench.sh server
 # ./1_bench.sh perf
-# ./1_bench.sh accu
+# ./1_bench.sh accuracy
 # ./1_bench.sh all
 
 mkdir -p results
 MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
 
-if [ $1 == "server" ] || [ $1 == "all" ]; then
+if [ $1 == "server" ]; then
     echo "INFO: server"
     vllm serve $MODEL \
 	--disable-log-requests \
 	--no-enable-prefix-caching \
 	--kv_cache_dtype fp8 \
-	--compilation-config '{"full_cuda_graph": true}' \
-	&
+	--compilation-config '{"full_cuda_graph": true}'
 fi
 
 
@@ -45,7 +44,9 @@ if [ $1 == "perf" ] || [ $1 == "all" ] ; then
     python show_results.py 
 fi
 
-if [ $1 == "accu" ] || [ $1 == "all" ] ; then
+
+# TODO: do not use 8 months old baberabb/lm-evaluation-harness/wikitext-tokens
+if [ $1 == "accuracy" ] || [ $1 == "all" ] ; then
     until curl -s localhost:8000/v1/models > /dev/null; 
     do
 	sleep 1

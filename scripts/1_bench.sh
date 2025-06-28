@@ -4,9 +4,25 @@
 # ./1_bench.sh accuracy
 # ./1_bench.sh profile
 # ./1_bench.sh all (perf + accuracy + profile)
+# ./1_bench.sh submit <team_name> (runs accuracy + perf + submits to leaderboard)
 
 mkdir -p results
 MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
+
+# Check team name for submit mode
+if [ $1 == "submit" ]; then
+    if [ ! -z "$2" ]; then
+        TEAM_NAME="$2"
+    elif [ ! -z "$TEAM_NAME" ]; then
+        TEAM_NAME="$TEAM_NAME"
+    else
+        echo "ERROR: Team name required for submit mode"
+        echo "Usage: ./1_bench.sh submit <team_name>"
+        echo "Or set TEAM_NAME environment variable"
+        exit 1
+    fi
+    echo "INFO: Using team name: $TEAM_NAME"
+fi
 
 if [ $1 == "server" ]; then
     echo "INFO: server"
@@ -18,7 +34,7 @@ if [ $1 == "server" ]; then
 fi
 
 
-if [ $1 == "perf" ] || [ $1 == "all" ] ; then
+if [ $1 == "perf" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
     until curl -s localhost:8000/v1/models > /dev/null; 
     do
 	sleep 1
@@ -42,12 +58,19 @@ if [ $1 == "perf" ] || [ $1 == "all" ] ; then
         --result-dir ./results/ \
         --result-filename $rpt \
         --percentile-metrics ttft,tpot,itl,e2el
-    python show_results.py 
+    
+    # Save performance results for submit mode
+    if [ $1 == "submit" ]; then
+        PERF_OUTPUT=$(python show_results.py)
+        echo "$PERF_OUTPUT"
+    else
+        python show_results.py 
+    fi
 fi
 
 
 # TODO: do not use 8 months old baberabb/lm-evaluation-harness/wikitext-tokens
-if [ $1 == "accuracy" ] || [ $1 == "all" ] ; then
+if [ $1 == "accuracy" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
     until curl -s localhost:8000/v1/models > /dev/null; 
     do
 	sleep 1
@@ -58,8 +81,16 @@ if [ $1 == "accuracy" ] || [ $1 == "all" ] ; then
 	cd lm-evaluation-harness
 	pip install -e .
 	pip install lm-eval[api]
+	cd ..
     fi
-    lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext
+    
+    # Save accuracy results for submit mode
+    if [ $1 == "submit" ]; then
+        ACCURACY_OUTPUT=$(lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext 2>&1)
+        echo "$ACCURACY_OUTPUT"
+    else
+        lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext
+    fi
 fi
 
 if [ $1 == "profile" ] || [ $1 == "all" ] ; then
@@ -87,4 +118,63 @@ if [ $1 == "profile" ] || [ $1 == "all" ] ; then
         --result-dir ./results_with_profile/ \
         --result-filename $rpt \
         --percentile-metrics ttft,tpot,itl,e2el
+fi
+
+if [ $1 == "submit" ]; then
+    echo "INFO: Submitting results for team: $TEAM_NAME"
+    
+    # Parse performance metrics from show_results.py output
+    # Expected format: ttft, tpot, itl, e2el, throughput (last line with numbers)
+    PERF_VALUES=$(echo "$PERF_OUTPUT" | tail -1 | tr ',' '\n' | sed 's/^[[:space:]]*//')
+    TTFT=$(echo "$PERF_VALUES" | sed -n '1p' | awk '{print $1/1000}')  # Convert ms to seconds
+    TPOT=$(echo "$PERF_VALUES" | sed -n '2p' | awk '{print $1/1000}')  # Convert ms to seconds  
+    ITL=$(echo "$PERF_VALUES" | sed -n '3p' | awk '{print $1/1000}')   # Convert ms to seconds
+    E2E=$(echo "$PERF_VALUES" | sed -n '4p' | awk '{print $1/1000}')   # Convert ms to seconds
+    THROUGHPUT=$(echo "$PERF_VALUES" | sed -n '5p')
+    
+    # Parse perplexity from accuracy output (word_perplexity)
+    PERPLEXITY=$(echo "$ACCURACY_OUTPUT" | grep -oE "word_perplexity[^0-9]*([0-9]+\.[0-9]+)" | grep -oE "[0-9]+\.[0-9]+")
+    
+    # Default to 0.0 if parsing fails
+    TTFT=${TTFT:-0.0}
+    TPOT=${TPOT:-0.0}
+    ITL=${ITL:-0.0}
+    E2E=${E2E:-0.0}
+    THROUGHPUT=${THROUGHPUT:-0.0}
+    PERPLEXITY=${PERPLEXITY:-0.0}
+    
+    echo "Performance metrics:"
+    echo "  TTFT: ${TTFT}s"
+    echo "  TPOT: ${TPOT}s"
+    echo "  ITL: ${ITL}s"
+    echo "  E2E: ${E2E}s"
+    echo "  Throughput: ${THROUGHPUT} tokens/s"
+    echo "  Perplexity: ${PERPLEXITY}"
+    
+    # Submit to leaderboard
+    echo "Submitting to leaderboard..."
+    curl -X POST http://0.0.0.0:7860/gradio_api/call/submit_results -s -H "Content-Type: application/json" -d "{
+        \"data\": [
+            \"$TEAM_NAME\",
+            $INPUT_LENGTH,
+            $OUTPUT_LENGTH,
+            $CONCURRENT,
+            $TTFT,
+            $TPOT,
+            $ITL,
+            $E2E,
+            $THROUGHPUT,
+            $PERPLEXITY
+        ]
+    }" | awk -F'"' '{ print $4}' | read EVENT_ID
+    
+    if [ ! -z "$EVENT_ID" ]; then
+        echo "Event ID: $EVENT_ID"
+        echo "Getting final result..."
+        curl -N http://0.0.0.0:7860/gradio_api/call/submit_results/$EVENT_ID
+        echo ""
+        echo "SUCCESS: Results submitted to leaderboard!"
+    else
+        echo "ERROR: Failed to get event ID from submission"
+    fi
 fi

@@ -123,14 +123,12 @@ fi
 if [ $1 == "submit" ]; then
     echo "INFO: Submitting results for team: $TEAM_NAME"
     
-    # Parse performance metrics from show_results.py output
-    # Expected format: ttft, tpot, itl, e2el, throughput (last line with numbers)
-    PERF_VALUES=$(echo "$PERF_OUTPUT" | tail -1 | tr ',' '\n' | sed 's/^[[:space:]]*//')
-    TTFT=$(echo "$PERF_VALUES" | sed -n '1p' | awk '{print $1/1000}')  # Convert ms to seconds
-    TPOT=$(echo "$PERF_VALUES" | sed -n '2p' | awk '{print $1/1000}')  # Convert ms to seconds  
-    ITL=$(echo "$PERF_VALUES" | sed -n '3p' | awk '{print $1/1000}')   # Convert ms to seconds
-    E2E=$(echo "$PERF_VALUES" | sed -n '4p' | awk '{print $1/1000}')   # Convert ms to seconds
-    THROUGHPUT=$(echo "$PERF_VALUES" | sed -n '5p')
+    PERF_LINE=$(echo "$PERF_OUTPUT" | grep -E "[0-9]+\.[0-9]+.*,[[:space:]]*[0-9]+\.[0-9]+" | tail -1)
+    TTFT=$(echo "$PERF_LINE" | awk -F',' '{gsub(/^[[:space:]]+|[[:space:]]+$/, "", $1); print $1}')     # Convert ms to seconds
+    TPOT=$(echo "$PERF_LINE" | awk -F',' '{gsub(/^[[:space:]]+|[[:space:]]+$/, "", $2); print $2}')     # Convert ms to seconds  
+    ITL=$(echo "$PERF_LINE" | awk -F',' '{gsub(/^[[:space:]]+|[[:space:]]+$/, "", $3); print $3}')      # Convert ms to seconds
+    E2E=$(echo "$PERF_LINE" | awk -F',' '{gsub(/^[[:space:]]+|[[:space:]]+$/, "", $4); print $4}')      # Convert ms to seconds
+    THROUGHPUT=$(echo "$PERF_LINE" | awk -F',' '{gsub(/^[[:space:]]+|[[:space:]]+$/, "", $5); print $5}')
     
     # Parse perplexity from accuracy output (word_perplexity)
     PERPLEXITY=$(echo "$ACCURACY_OUTPUT" | grep -oE "word_perplexity[^0-9]*([0-9]+\.[0-9]+)" | grep -oE "[0-9]+\.[0-9]+")

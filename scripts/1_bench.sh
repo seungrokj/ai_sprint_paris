@@ -86,10 +86,10 @@ if [ $1 == "accuracy" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
     
     # Save accuracy results for submit mode
     if [ $1 == "submit" ]; then
-        ACCURACY_OUTPUT=$(lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext 2>&1)
+        ACCURACY_OUTPUT=$(lm_eval --model local-completions --model_args base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext 2>&1)
         echo "$ACCURACY_OUTPUT"
     else
-        lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext
+        lm_eval --model local-completions --model_args base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext
     fi
 fi
 
@@ -130,8 +130,10 @@ if [ $1 == "submit" ]; then
     E2E=$(echo "$PERF_LINE" | awk -F',' '{gsub(/^[[:space:]]+|[[:space:]]+$/, "", $4); print $4}')      # Convert ms to seconds
     THROUGHPUT=$(echo "$PERF_LINE" | awk -F',' '{gsub(/^[[:space:]]+|[[:space:]]+$/, "", $5); print $5}')
     
-    # Parse perplexity from accuracy output (word_perplexity)
-    PERPLEXITY=$(echo "$ACCURACY_OUTPUT" | grep -oE "word_perplexity[^0-9]*([0-9]+\.[0-9]+)" | grep -oE "[0-9]+\.[0-9]+")
+    # Parse accuracy metrics from lm_eval output
+    BITS_PER_BYTE=$(echo "$ACCURACY_OUTPUT" | grep -oE "bits_per_byte[^0-9]*([0-9]+\.[0-9]+)" | grep -oE "[0-9]+\.[0-9]+")
+    BYTE_PERPLEXITY=$(echo "$ACCURACY_OUTPUT" | grep -oE "byte_perplexity[^0-9]*([0-9]+\.[0-9]+)" | grep -oE "[0-9]+\.[0-9]+")
+    WORD_PERPLEXITY=$(echo "$ACCURACY_OUTPUT" | grep -oE "word_perplexity[^0-9]*([0-9]+\.[0-9]+)" | grep -oE "[0-9]+\.[0-9]+")
     
     # Default to 0.0 if parsing fails
     TTFT=${TTFT:-0.0}
@@ -139,15 +141,20 @@ if [ $1 == "submit" ]; then
     ITL=${ITL:-0.0}
     E2E=${E2E:-0.0}
     THROUGHPUT=${THROUGHPUT:-0.0}
-    PERPLEXITY=${PERPLEXITY:-0.0}
+    BITS_PER_BYTE=${BITS_PER_BYTE:-0.0}
+    BYTE_PERPLEXITY=${BYTE_PERPLEXITY:-0.0}
+    WORD_PERPLEXITY=${WORD_PERPLEXITY:-0.0}
     
     echo "Performance metrics:"
-    echo "  TTFT: ${TTFT}s"
-    echo "  TPOT: ${TPOT}s"
-    echo "  ITL: ${ITL}s"
-    echo "  E2E: ${E2E}s"
+    echo "  TTFT: ${TTFT}ms"
+    echo "  TPOT: ${TPOT}ms"
+    echo "  ITL: ${ITL}ms"
+    echo "  E2E: ${E2E}ms"
     echo "  Throughput: ${THROUGHPUT} tokens/s"
-    echo "  Perplexity: ${PERPLEXITY}"
+    echo "Accuracy metrics:"
+    echo "  Bits per Byte: ${BITS_PER_BYTE}"
+    echo "  Byte Perplexity: ${BYTE_PERPLEXITY}"
+    echo "  Word Perplexity: ${WORD_PERPLEXITY}"
     
     # Submit to leaderboard
     echo "Submitting to leaderboard..."
@@ -162,7 +169,9 @@ if [ $1 == "submit" ]; then
             $ITL,
             $E2E,
             $THROUGHPUT,
-            $PERPLEXITY
+            $BITS_PER_BYTE,
+            $BYTE_PERPLEXITY,
+            $WORD_PERPLEXITY
         ]
     }" | awk -F'"' '{ print $4}' | read EVENT_ID
     

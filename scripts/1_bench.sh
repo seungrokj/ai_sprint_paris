@@ -7,7 +7,7 @@
 # ./1_bench.sh submit <team_name> (runs accuracy + perf + submits to leaderboard)
 
 mkdir -p results
-MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
+MODEL="Qwen/Qwen3-0.6B"
 
 # Check team name for submit mode
 if [ $1 == "submit" ]; then
@@ -45,7 +45,7 @@ if [ $1 == "perf" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
     CONCURRENT=16
     date=$(date +'%b%d_%H_%M_%S')
     rpt=result_${date}.json
-    python /vllm-dev/benchmarks/benchmark_serving.py \
+    python /fsx/matej_sirovatka/ai_sprint_paris/vllm/benchmarks/benchmark_serving.py \
         --model $MODEL \
         --dataset-name random \
         --random-input-len ${INPUT_LENGTH} \
@@ -58,6 +58,7 @@ if [ $1 == "perf" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
         --result-dir ./results/ \
         --result-filename $rpt \
         --percentile-metrics ttft,tpot,itl,e2el
+    python /fsx/matej_sirovatka/ai_sprint_paris/hackathon_guides/2_perf_accuracy_measurement/show_results.py 
     
     # Save performance results for submit mode
     if [ $1 == "submit" ]; then
@@ -104,7 +105,7 @@ if [ $1 == "profile" ] || [ $1 == "all" ] ; then
     CONCURRENT=16
     date=$(date +'%b%d_%H_%M_%S')
     rpt=result_${date}.json
-    python /vllm-dev/benchmarks/benchmark_serving.py \
+    python /fsx/matej_sirovatka/ai_sprint_paris/vllm/benchmarks/benchmark_serving.py \
         --model $MODEL \
         --dataset-name random \
         --random-input-len ${INPUT_LENGTH} \

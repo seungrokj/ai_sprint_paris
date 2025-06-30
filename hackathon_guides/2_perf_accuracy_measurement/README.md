@@ -35,7 +35,7 @@ to log interactively into the running container in an other shell.
 
 ## Remove the existing vLLM and update the latest main branch of the upstream vllm in the container
 
-Make sure to reinstall the upstreawm vllm. Please refer to the installation flow at [install local vllm](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/4_developing_vllm#install-your-vllm-local-version-instead-of-the-provided-reference-in-the-docker-container)
+Make sure to install the upstream vllm. Please refer to the installation flow at [install local vllm](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/4_developing_vllm#install-your-vllm-local-version-instead-of-the-provided-reference-in-the-docker-container)
 
 ## Run vllm server & benchmarks (In the container)
 

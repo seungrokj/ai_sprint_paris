@@ -5,7 +5,7 @@
 
 ## First, remove the existing vLLM and reinstall the upstream vllm to the local folder in the container
 
-First thing first, refer to the vllm local installation flow at [install local vllm](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/4_developing_vllm#getting-started-developing-on-top-of-vllm)
+First thing first, refer to the vllm local installation flow at [install local vllm](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/1_developing_vllm)
 
 Once you successfully installed the latest vllm, you can find you local vllm version is greater than **0.9.2**
 ```sh

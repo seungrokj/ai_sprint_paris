@@ -47,12 +47,8 @@ cd /workspace
 
 ### 2) Run accuracy benchmark (client)
 ```sh
+export HF_TOKEN=YOUR_HF_TOKEN
 ./1_bench.sh accuracy
-```
-
-### Run performance and accuracy benchmarks sequentially 
-```sh
-./1_bench.sh all
 ```
 
 ## You will see these performance metrics

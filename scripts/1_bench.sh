@@ -9,6 +9,10 @@
 mkdir -p results
 MODEL="Qwen/Qwen3-0.6B"
 
+SHOW_RESULTS="/fsx/matej_sirovatka/ai_sprint_paris/hackathon_guides/2_perf_accuracy_measurement/show_results.py"
+LB_URL="https://siro1-amd-leaderboard.hf.space"
+# LB_URL="https://706f401ad35dfbae0b.gradio.live"
+
 # Check team name for submit mode
 if [ $1 == "submit" ]; then
     if [ ! -z "$2" ]; then
@@ -58,14 +62,14 @@ if [ $1 == "perf" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
         --result-dir ./results/ \
         --result-filename $rpt \
         --percentile-metrics ttft,tpot,itl,e2el
-    python /fsx/matej_sirovatka/ai_sprint_paris/hackathon_guides/2_perf_accuracy_measurement/show_results.py 
+    python $SHOW_RESULTS 
     
     # Save performance results for submit mode
     if [ $1 == "submit" ]; then
-        PERF_OUTPUT=$(python show_results.py)
+        PERF_OUTPUT=$(python $SHOW_RESULTS)
         echo "$PERF_OUTPUT"
     else
-        python show_results.py 
+        python $SHOW_RESULTS 
     fi
 fi
 
@@ -87,10 +91,10 @@ if [ $1 == "accuracy" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
     
     # Save accuracy results for submit mode
     if [ $1 == "submit" ]; then
-        ACCURACY_OUTPUT=$(lm_eval --model local-completions --model_args base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext 2>&1)
+        ACCURACY_OUTPUT=$(lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext 2>&1)
         echo "$ACCURACY_OUTPUT"
     else
-        lm_eval --model local-completions --model_args base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext
+        lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext
     fi
 fi
 
@@ -159,12 +163,9 @@ if [ $1 == "submit" ]; then
     
     # Submit to leaderboard
     echo "Submitting to leaderboard..."
-    curl -X POST http://0.0.0.0:7860/gradio_api/call/submit_results -s -H "Content-Type: application/json" -d "{
+    curl -X POST $LB_URL/gradio_api/call/submit_results -s -H "Content-Type: application/json" -d "{
         \"data\": [
             \"$TEAM_NAME\",
-            $INPUT_LENGTH,
-            $OUTPUT_LENGTH,
-            $CONCURRENT,
             $TTFT,
             $TPOT,
             $ITL,
@@ -175,14 +176,8 @@ if [ $1 == "submit" ]; then
             $WORD_PERPLEXITY
         ]
     }" | awk -F'"' '{ print $4}' | read EVENT_ID
-    
-    if [ ! -z "$EVENT_ID" ]; then
-        echo "Event ID: $EVENT_ID"
-        echo "Getting final result..."
-        curl -N http://0.0.0.0:7860/gradio_api/call/submit_results/$EVENT_ID
-        echo ""
-        echo "SUCCESS: Results submitted to leaderboard!"
-    else
-        echo "ERROR: Failed to get event ID from submission"
-    fi
+
+    sleep 2
+
+    echo "SUCCESS: Results submitted to leaderboard! 🤗 Check it out @ $LB_URL"
 fi

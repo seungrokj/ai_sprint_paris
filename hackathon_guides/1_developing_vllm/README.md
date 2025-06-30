@@ -6,7 +6,7 @@
 First, clone the repo
 
 ```sh
-git clone git clone https://github.com/seungrokj/ai_sprint_paris
+git clone https://github.com/seungrokj/ai_sprint_paris
 cd ai_sprint_paris/scripts
 ```
 

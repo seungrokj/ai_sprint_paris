@@ -3,24 +3,11 @@
 > [!NOTE]  
 > Scripts referred throughout this guide are available at https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts.
 
-First, clone the repo
-```sh
-git clone git clone https://github.com/seungrokj/ai_sprint_paris
-cd ai_sprint_paris/scripts
-```
+## First, remove the existing vLLM and reinstall the upstream vllm to the local folder in the container
 
-## Start the vLLM development and evaluation docker container
+First thing first, refer to the vllm local installation flow at [install local vllm](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/4_developing_vllm#getting-started-developing-on-top-of-vllm)
 
-This script will [start a docker container](https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts/0_container.sh) with vllm pre-installed. The container runs the image `rocm/vllm-dev:nightly_0610_rc2_0610_rc2_20250605`.
-
-```sh
-cd ai_sprint_paris/scripts
-./0_container.sh
-```
-
-Once the docker container is started, you should should see the scripts from https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts mounted into the container at `/workspace`.
-
-## Attach an other terminal to the running container
+## After vllm installation, attach an other terminal to the running container
 
 We recommend you to use multiple terminals (or termux, or equivalent) `ssh`ed into your MI300 VM.
 
@@ -32,14 +19,11 @@ docker exec -it vllm-container /bin/bash
 
 to log interactively into the running container in an other shell.
 
-
-## Remove the existing vLLM and reinstall the upstream vllm to the local folder in the container
-
-Make sure to install the upstream vllm. Please refer to the installation flow at [install local vllm](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/4_developing_vllm#clone-vllm-for-local-development-in-the-devcloud-vm)
-
 ## Run vllm server & benchmarks (In the container)
 
 Run `vllm serve` through our provided reference script to start the server that will be used for latency/throughput/accuracy evaluation:
+
+Make sure you're at /workspace for running benchmarks
 
 ```sh
 cd /workspace

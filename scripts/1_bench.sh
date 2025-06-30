@@ -7,6 +7,7 @@
 
 mkdir -p results
 export MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
+export VLLM_TORCH_PROFILER_DIR=./profile
 
 if [ $1 == "server" ]; then
     echo "INFO: server"

@@ -42,6 +42,10 @@ Make sure to install the upstream vllm. Please refer to the installation flow at
 Run `vllm serve` through our provided reference script to start the server that will be used for latency/throughput/accuracy evaluation:
 
 ```sh
+cd /workspace
+```
+
+```sh
 ./1_bench.sh server
 ```
 

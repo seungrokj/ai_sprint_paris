@@ -17,7 +17,7 @@ This guide gives a few more details to simplify development.
 ## Clone vLLM for local development in the devcloud VM
 
 ```bash
-git clone https://github.com/vllm-project/vllm.git
+git clone https://github.com/vllm-project/vllm.git /vllm-dev
 ```
 
 ## Start the vLLM development and evaluation docker container

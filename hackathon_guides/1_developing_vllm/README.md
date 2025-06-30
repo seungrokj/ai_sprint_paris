@@ -21,7 +21,6 @@ git clone https://github.com/vllm-project/vllm.git
 This script will [start a docker container](https://github.com/seungrokj/ai_sprint_paris/blob/main/scripts/0_container.sh) with vllm pre-installed. The container runs the image `rocm/vllm-dev:nightly_0610_rc2_0610_rc2_20250605`.
 
 ```sh
-cd ai_sprint_paris/scripts
 ./0_container.sh
 ```
 

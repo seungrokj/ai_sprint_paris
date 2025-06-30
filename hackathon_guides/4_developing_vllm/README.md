@@ -40,7 +40,7 @@ Thus, the vLLM docker container launch script provided at https://github.com/seu
 Once in the container, you can run
 
 ```bash
-pip uninstall vllm
+pip uninstall vllm -y
 cd /vllm-dev
 python setup.py develop
 ```

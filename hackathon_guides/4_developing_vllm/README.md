@@ -10,10 +10,6 @@ git clone git clone https://github.com/seungrokj/ai_sprint_paris
 cd ai_sprint_paris/scripts
 ```
 
-We suggest you to refer to https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/2_perf_accuracy_measurement first. Reference bash scripts to launch a docker container to develop from, and commands to evaluate latency, throughput, accuracy are provided.
-
-This guide gives a few more details to simplify development.
-
 ## Clone vLLM for local development in the devcloud VM
 
 ```bash

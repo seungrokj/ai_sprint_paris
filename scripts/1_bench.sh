@@ -6,7 +6,7 @@
 # ./1_bench.sh all (perf + accuracy + profile)
 
 mkdir -p results
-MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
+export MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
 
 if [ $1 == "server" ]; then
     echo "INFO: server"

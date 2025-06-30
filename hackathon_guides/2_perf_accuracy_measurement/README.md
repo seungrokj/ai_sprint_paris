@@ -7,6 +7,13 @@
 
 First thing first, refer to the vllm local installation flow at [install local vllm](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/4_developing_vllm#getting-started-developing-on-top-of-vllm)
 
+Once you successfully installed the latest vllm, you can find you local vllm version is greater than **0.9.2**
+```sh
+root@7c35b3b04713:/workspace# pip list | grep vllm
+vllm                                     0.9.2.dev321+g8fe7fc863.rocm641 /vllm-dev
+```
+
+
 ## After vllm installation, attach an other terminal to the running container
 
 We recommend you to use multiple terminals (or termux, or equivalent) `ssh`ed into your MI300 VM.

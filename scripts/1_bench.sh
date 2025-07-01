@@ -7,7 +7,7 @@
 # ./1_bench.sh submit <team_name> (runs accuracy + perf + submits to leaderboard)
 
 mkdir -p results
-MODEL="MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
+MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
 
 LB_URL="https://siro1-amd-leaderboard.hf.space"
 

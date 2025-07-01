@@ -75,10 +75,11 @@ if [ $1 == "accuracy" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
     done
     echo "INFO: accuracy"
     if [ "$(which lm_eval)" == "" ] ; then
-	git clone https://github.com/baberabb/lm-evaluation-harness.git -b wikitext-tokens
-	cd lm-evaluation-harness
-	pip install -e .
-	pip install lm-eval[api]
+    git clone https://github.com/baberabb/lm-evaluation-harness.git -b wikitext-tokens
+    cd lm-evaluation-harness
+    pip install -e .
+    pip install lm-eval[api]
+    fi
     
     ACCURACY_OUTPUT=$(lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext 2>&1)
     echo "$ACCURACY_OUTPUT"

@@ -7,11 +7,9 @@
 # ./1_bench.sh submit <team_name> (runs accuracy + perf + submits to leaderboard)
 
 mkdir -p results
-MODEL="Qwen/Qwen3-0.6B"
+MODEL="MODEL="amd/Mixtral-8x7B-Instruct-v0.1-FP8-KV"
 
-SHOW_RESULTS="/fsx/matej_sirovatka/ai_sprint_paris/hackathon_guides/2_perf_accuracy_measurement/show_results.py"
 LB_URL="https://siro1-amd-leaderboard.hf.space"
-# LB_URL="https://706f401ad35dfbae0b.gradio.live"
 
 # Check team name for submit mode
 if [ $1 == "submit" ]; then
@@ -49,7 +47,7 @@ if [ $1 == "perf" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
     CONCURRENT=16
     date=$(date +'%b%d_%H_%M_%S')
     rpt=result_${date}.json
-    python /fsx/matej_sirovatka/ai_sprint_paris/vllm/benchmarks/benchmark_serving.py \
+    python /vllm-dev/benchmarks/benchmark_serving.py \
         --model $MODEL \
         --dataset-name random \
         --random-input-len ${INPUT_LENGTH} \
@@ -62,14 +60,9 @@ if [ $1 == "perf" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
         --result-dir ./results/ \
         --result-filename $rpt \
         --percentile-metrics ttft,tpot,itl,e2el
-    python $SHOW_RESULTS 
-    
-    # Save performance results for submit mode
-    if [ $1 == "submit" ]; then
-        PERF_OUTPUT=$(python $SHOW_RESULTS)
-        echo "$PERF_OUTPUT"
-    else
-        python $SHOW_RESULTS 
+
+    PERF_OUTPUT=$(python show_results.py)
+    echo "$PERF_OUTPUT"
     fi
 fi
 
@@ -86,16 +79,9 @@ if [ $1 == "accuracy" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
 	cd lm-evaluation-harness
 	pip install -e .
 	pip install lm-eval[api]
-	cd ..
-    fi
     
-    # Save accuracy results for submit mode
-    if [ $1 == "submit" ]; then
-        ACCURACY_OUTPUT=$(lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext 2>&1)
-        echo "$ACCURACY_OUTPUT"
-    else
-        lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext
-    fi
+    ACCURACY_OUTPUT=$(lm_eval --model local-completions --model_args model=$MODEL,base_url=http://0.0.0.0:8000/v1/completions,num_concurrent=10,max_retries=3 --tasks wikitext 2>&1)
+    echo "$ACCURACY_OUTPUT"
 fi
 
 if [ $1 == "profile" ] || [ $1 == "all" ] ; then
@@ -109,7 +95,7 @@ if [ $1 == "profile" ] || [ $1 == "all" ] ; then
     CONCURRENT=16
     date=$(date +'%b%d_%H_%M_%S')
     rpt=result_${date}.json
-    python /fsx/matej_sirovatka/ai_sprint_paris/vllm/benchmarks/benchmark_serving.py \
+    python /vllm-dev/benchmarks/benchmark_serving.py \
         --model $MODEL \
         --dataset-name random \
         --random-input-len ${INPUT_LENGTH} \

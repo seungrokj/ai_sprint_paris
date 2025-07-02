@@ -78,7 +78,7 @@ ssh root@{your VM ip}
 Now you can check model performance, accuracy, profiling, and how to use HF leaderboard
 🏃‍➡️ [hackathon_start](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/2_perf_accuracy_profile_vllm)
 
-## Cleaning up vLLM install
+## 📌 Cleaning up vLLM install
 
 In our experience, if you modify vLLM version and/or kernels, it can be a good practice to clean the previous compiled vLLM shared objects, as in some cases they are not.
 

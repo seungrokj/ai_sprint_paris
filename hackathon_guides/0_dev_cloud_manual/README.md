@@ -2,7 +2,7 @@
 
 ## ⭐ Step 1
 - Click GPU Droplets
-![DO_1](./assets/DO_1.jpg)
+![DO_1](./assets/DO_1_n.jpg)
  
 ## ⭐Step 2
 - Select AMD MI300X (1 GPU)
@@ -15,12 +15,14 @@
 - Please add TAGs with your name to easily identify your instance
 - Check out SSH IP
 - Networking: You can skip this (this is only for en/disabling additional in/out bound ports other than ssh 22 port) 
-![DO_3](./assets/DO_3.jpg)
+![DO_3](./assets/DO_3_n.jpg)
 
 ## ⭐Step 4: Docker Launch
+- Make sure you selected "vLLM Image" also check if TAGS is correctly applied
 - Open a terminal and access the instance IP along with PORTs to connect to the instance
 
 ```sh
+# for example, ssh root@129.212.176.203
 ssh root@YOUR_OP
 ```
 - Check out GPU status by "rocm-smi"

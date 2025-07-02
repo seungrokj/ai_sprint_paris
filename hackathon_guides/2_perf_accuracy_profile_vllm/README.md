@@ -31,11 +31,9 @@ Run `vllm serve` through our provided reference script to start the server that 
 
 Make sure you're at /workspace for running benchmarks
 
+### 0) Launch vllm (server)
 ```sh
 cd /workspace
-```
-
-```sh
 ./1_bench.sh server
 ```
 
@@ -79,9 +77,7 @@ export TEAM_NAME="your_team_name"
 This will submit run `perf` and `accuracy` benchmarks, show you the results and submit them to a leaderboard. The leaderboard is hosted 
 as a Huggingface 🤗 space and is available at [https://huggingface.co/spaces/siro1/amd-leaderboard](https://huggingface.co/spaces/siro1/amd-leaderboard).
 
-### 3) Run profiling
-
-Run performance profile (client)
+### 3) Run profiling (client)
 
 ```sh
 ./1_bench.sh profile

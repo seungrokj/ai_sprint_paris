@@ -68,6 +68,18 @@ result_Jun26_10_34_48.json
 |        |       |none  |     0|byte_perplexity|↓  |1.4540|±  |   N/A|
 |        |       |none  |     0|word_perplexity|↓  |4.1378|±  |   N/A|
 
+
+### Submit to a leaderboard
+
+If you want to see how your optimizations perform against other participants, we provide one more command.
+
+```sh
+export TEAM_NAME="your_team_name"
+./1_bench.sh submit
+```
+This will submit run `perf` and `accuracy` benchmarks, show you the results and submit them to a leaderboard. The leaderboard is hosted 
+as a Huggingface 🤗 space and is available at [https://huggingface.co/spaces/siro1/amd-leaderboard](https://huggingface.co/spaces/siro1/amd-leaderboard).
+
 ### 3) Run profiling
 
 Run performance profile (client)

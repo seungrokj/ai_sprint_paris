@@ -14,7 +14,6 @@
 ## ⭐Step 3
 - Please add TAGs with your name to easily identify your instance
 - Check out SSH IP
-- Networking: You can skip this (this is only for en/disabling additional in/out bound ports other than ssh 22 port) 
 ![DO_3](./assets/DO_3_n.jpg)
 
 ## ⭐Step 4: Docker Launch

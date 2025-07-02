@@ -64,7 +64,6 @@ if [ $1 == "perf" ] || [ $1 == "all" ] || [ $1 == "submit" ]; then
 
     PERF_OUTPUT=$(python show_results.py)
     echo "$PERF_OUTPUT"
-    fi
 fi
 
 

@@ -9,7 +9,6 @@
 - Choose an image (vLLM image)
 - Add your SSH public key and select your key
 - Click "Create GPU Droplet"
-
 ![DO_2](./assets/DO_2_vllm.jpg)
 
 ## ⭐Step 3
@@ -25,6 +24,6 @@
 ssh root@YOUR_OP
 ```
 - Check out GPU status by "rocm-smi"
-- ![DO_4](./assets/DO_4_rocmsmi.jpg)
+![DO_4](./assets/DO_4_rocmsmi.jpg)
 
 Now navigate to [hackathon_start](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/1_developing_vllm)

@@ -85,7 +85,7 @@ rm -r ./build
 
 ## Now navigate to the next section
 Now you can check model performance, accuracy, profiling, and how to use HF leaderboard
-[hackathon_start](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/2_perf_accuracy_profile_vllm)
+🏃‍➡️ [hackathon_start](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/2_perf_accuracy_profile_vllm)
 
 ## References
 

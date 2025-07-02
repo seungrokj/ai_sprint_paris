@@ -14,7 +14,7 @@ vllm                                     0.9.2.dev321+g8fe7fc863.rocm641 /vllm-d
 ```
 
 
-## After vllm installation, attach an other terminal to the running container (1st terminal: server, 2nd terminal: client)
+## After vllm installation, open another terminal (1st terminal: server, 2nd terminal: client)
 
 We recommend you to use multiple terminals (or termux, or equivalent) `ssh`ed into your MI300 VM.
 
@@ -23,7 +23,6 @@ Once logged into the VM and once vLLM container is started (previous step), you 
 ```bash
 docker exec -it vllm-container /bin/bash
 ```
-
 to log interactively into the running container in an other shell.
 
 ## Run vllm server & benchmarks (In the container)

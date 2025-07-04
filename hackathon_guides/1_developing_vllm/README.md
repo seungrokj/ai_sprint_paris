@@ -55,13 +55,9 @@ pip freeze | grep triton
 # triton @ file:///install/triton-3.2.0%2Bgite5be006a-cp312-cp312-linux_x86_64.whl#sha256=5ab00b333450c7179db7034795d0c70be6fa5e9a6ed2e203b11fb52cea116efc
 ```
 
-TODO: check if CK is available? any other ones? need quark for fp8 or not?
-
 Depending on which code path gets executed on vLLM, some of these dependencies may be used. There may be room for optimization in these dependencies as well.
 
-In this case, a recommended approach could be to clone locally these dependencies, and also mount them into vLLM container with `-v $(pwd)/path/to/aiter:/aiter-dev`.
-
-Read more: https://stackoverflow.com/questions/23439126/how-to-mount-a-host-directory-in-a-docker-container
+In this case, a recommended approach could be to clone locally these dependencies into the same repository where vLLM was cloned, and they will be [mounted into `/workspace` in the vllm docker container](https://github.com/seungrokj/ai_sprint_paris/blob/027dac71381d4d807dd2239f83bd21b74385aeef/scripts/0_container.sh#L43) (`-v "$PWD":/workspace`).
 
 ## VS Code usage
 
@@ -74,7 +70,25 @@ Add New SSH Host
 ssh root@{your VM ip}
 ```
 
+In case this does not work, you may need to specify your ssh key to use:
+
+```
+CTRL + ATL + P
+> Remote-SSH: Connect to Host...
+Configure SSH Hosts...
+```
+
+and add to the relevant SSH config file:
+
+```
+Host hackathon
+  HostName your.node.ip.address
+  User root
+  IdentityFile ~/path/to/ssh_key
+```
+
 ## Now navigate to the next section
+
 Now you can check model performance, accuracy, profiling, and how to use HF leaderboard
 🏃‍➡️ [hackathon_start](https://github.com/seungrokj/ai_sprint_paris/tree/main/hackathon_guides/2_perf_accuracy_profile_vllm)
 
@@ -86,21 +100,3 @@ In our experience, if you modify vLLM version and/or kernels, it can be a good p
 rm -r vllm/*.so
 rm -r ./build
 ```
-
-## References
-
-### vLLM
-
-* Documentation: https://docs.vllm.ai/en/latest/
-* Researching issues and PRs in https://github.com/vllm-project/vllm can be helpful.
-
-### AMD Instinct MI300X
-
-AMD Instinct MI300X GPU uses the CDNA3 architecture. Its Instruction Set Architecture is a good reference: https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/instruction-set-architectures/amd-instinct-mi300-cdna3-instruction-set-architecture.pdf
-
-### ROCm and AMD libraries
-
-External AMD libraries that are used in the ROCm distribution of vLLM are good references too:
-
-* AITER: https://github.com/ROCm/aiter
-* Composable Kernel: https://github.com/ROCm/composable_kernel

@@ -172,18 +172,7 @@ And go to http://127.0.0.1:8050 on your laptop to see the profiling UI, for exam
 ![gui3](./assets/gui3.png)
 
 
-## Profiling with RocmProfileData
+## Other available profilers
 
-ROCm Profile Data is a collection of tools for tracing and analyzing gpu related activity on a system. This is represented by a timeline of api calls, app log messages, async gpu operations, and related interactions/dependencies.
-
-References:
-* https://rocm.blogs.amd.com/software-tools-optimization/kernel-analysis-deep/README.html
-* https://github.com/ROCm/vllm/tree/main/benchmarks/profiling
-
-TODO: test it & see if it is worth it, any difference with torch profiler?
-
-## Profiling with ROCm Systems Profiler
-
-Reference: https://rocm.docs.amd.com/projects/rocprofiler-systems/en/latest/index.html
-
-TODO: test it and see if it is worth it to include here / any difference with torch profiler.
+* [ROCm Systems Profiler](https://rocm.docs.amd.com/projects/rocprofiler-systems/en/latest/index.html): It is useful to profile complex workloads which involves multiple kernels, to get a global trace view. For vllm, it would be similar to pytorch profiler.
+* [ROCprof Compute Viewer](https://github.com/ROCm/rocprof-compute-viewer): Released ~2 months ago, it gives a more detailed profiling view at the kernel level than rocprof-compute, notably at the assembly level. [Documentation here](https://rocm.docs.amd.com/projects/rocprof-compute-viewer/en/latest/).

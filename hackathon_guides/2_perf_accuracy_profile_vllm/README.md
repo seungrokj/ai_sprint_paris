@@ -106,15 +106,71 @@ Also, you will see GPU-side 1 layer out of 1 token decoding activities during de
 
 ## Profiling individual kernels with ROCm Compute Profiler (omniperf)
 
+In case you are looking to optimize a specific HIP/Triton kernel (that e.g. you detected from a more high level profiler as PyTorch profiler), ROCm Compute Profiler is a good tool to use.
+
 Reference: https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/
 
-To display profile results, both a CLI and UI are available:
-* https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/how-to/analyze/cli.html
-* https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/how-to/analyze/standalone-gui.html
+Installation instructions are available [here](https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/install/core-install.html). Specifically on DigitalOcean (AMD Dev Cloud) machines, you can install ROCm Compute Profiler with the following commands:
 
-In case you'd like to use the UI, it might be easier to dump the profile data in your local computer.
+```bash
+apt update
+apt install -y rocprofiler-compute
+apt remove -y python3-blinker
+update-alternatives --install /usr/bin/rocprofiler-compute rocprof-compute /opt/rocm/bin/rocprof-compute 0
+pip install -r /opt/rocm/libexec/rocprofiler-compute/requirements.txt
+apt install -y locales && locale-gen en_US.UTF-8
+pip install "dash>=3.0.0"
 
-TODO: test it again & share workflow
+# Fix this bug in the latest package manager release: https://github.com/ROCm/rocprofiler-compute/issues/640
+find /opt/rocm/libexec/rocprofiler-compute -type f -name '*.py' -exec sed -i 's/self.app.run_server/self.app.run/g' {} \;
+find /opt/rocm/libexec/rocprofiler-compute -type f -name 'gui.py' -exec sed -i 's/\]\[0\]/\].iloc\[0\]/g' {} \;
+```
+
+Once installed, there are two steps:
+
+1. Profile the kernel to collect metrics about the GPU usage.
+2. Analyze the collected statistics, either through a [CLI](https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/how-to/analyze/cli.html) or a [graphical UI](https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/how-to/analyze/standalone-gui.html).
+
+To profile, one can run:
+```bash
+CUDA_VISIBLE_DEVICES=0 ROCPROFCOMPUTE_LOGLEVEL=debug rocprofiler-compute profile --name your_name --device 0 --kernel sgemm_16x16x4 -- python  /repos/fp6_experiments/gemms_lib/test_gemm_v2.py
+```
+
+Parameters:
+
+* `--name`: The name of the profile run, it will be saved under `workloads/name/MI300`.
+* `--device`: Used to restrict the profiling e.g. on a single device.
+* `--kernel`: Filter the profiled workload to collect statistics only from kernel(s) having a specific substring in their name. It is useful to pass a more complex script to `rocprofiler-compute` but still profile a single kernel.
+
+To analyze results, one can run:
+```bash
+rocprofiler-compute analyze -p workloads/your_name/MI300/
+```
+
+This command displays profile results directly in the command line, you can see [an example of profile analysis here](https://github.com/seungrokj/ai_sprint_paris/blob/main/hackathon_guides/2_perf_accuracy_profile_vllm/assets/example_rocprof_compute.txt).
+
+
+> [!TIP]
+> The rocprofiler-compute's [performance model documentation](https://rocm.docs.amd.com/projects/rocprofiler-compute/en/latest/conceptual/performance-model.html) is very useful to understand these metrics.
+
+In case you'd like to use the graphical UI, you can use: `rocprofiler-compute analyze -p workloads/your_name/MI300/ --gui`
+
+To display the GUI in your web browser, you will need to [forward the port](https://www.ssh.com/academy/ssh/tunneling-example) used by rocprofiler-compute (usually `8050`) through an ssh connection:
+
+```bash
+ssh -L 127.0.0.1:8050:127.0.0.1:8050 yourname@ip
+```
+
+And go to http://127.0.0.1:8050 on your laptop to see the profiling UI, for example:
+
+![gui0](./assets/gui0.jpg)
+
+![gui1](./assets/gui1.jpg)
+
+![gui2](./assets/gui2.jpg)
+
+![gui3](./assets/gui3.jpg)
+
 
 ## Profiling with RocmProfileData
 

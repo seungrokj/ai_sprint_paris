@@ -147,7 +147,7 @@ To analyze results, one can run:
 rocprofiler-compute analyze -p workloads/your_name/MI300/
 ```
 
-This command displays profile results directly in the command line, you can see [an example of profile analysis here](https://github.com/seungrokj/ai_sprint_paris/blob/main/hackathon_guides/2_perf_accuracy_profile_vllm/assets/example_rocprof_compute.txt).
+This command displays profile results directly in the command line, you can see [an example of profile analysis here](https://github.com/seungrokj/ai_sprint_paris/blob/main/hackathon_guides/2_perf_accuracy_profile_vllm/assets/example_rocprof_compute_metrics.txt).
 
 
 > [!TIP]
@@ -163,13 +163,13 @@ ssh -L 127.0.0.1:8050:127.0.0.1:8050 yourname@ip
 
 And go to http://127.0.0.1:8050 on your laptop to see the profiling UI, for example:
 
-![gui0](./assets/gui0.jpg)
+![gui0](./assets/gui0.png)
 
-![gui1](./assets/gui1.jpg)
+![gui1](./assets/gui1.png)
 
-![gui2](./assets/gui2.jpg)
+![gui2](./assets/gui2.png)
 
-![gui3](./assets/gui3.jpg)
+![gui3](./assets/gui3.png)
 
 
 ## Profiling with RocmProfileData

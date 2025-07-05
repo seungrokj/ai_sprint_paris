@@ -84,6 +84,10 @@ as a Huggingface 🤗 space and is available at [https://huggingface.co/spaces/s
 ./1_bench.sh profile
 ```
 
+It can be useful to inspect the parameters in this profiling script to generate a smaller or larger trace, notably `OUTPUT_LENGTH` and `CONCURRENT` parameters. [PyTorch profiler](https://docs.pytorch.org/tutorials/recipes/recipes/profiler_recipe.html) may produce very large traces when profiling large models of with many run repetitions.
+
+You also have the option to use the following Mixtral 8x7b FP8 model with only 2 layers, which is smaller to profile and will produce a smaller trace: https://huggingface.co/fxmarty/Mixtral-8x7B-Instruct-v0.1-FP8-KV-2-layers.
+
 ### Visualizing the profiling trace
 
 Profile dump is saved under `./profile/*.pt.trace.json.gz`, for example `./profile/09c1eb36108d_137.1750940187968632644.pt.trace.json.gz`.

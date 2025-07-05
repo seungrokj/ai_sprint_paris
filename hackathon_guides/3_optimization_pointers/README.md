@@ -2,13 +2,18 @@
 
 You are free to go in any direction, but here are some ideas and references to help you!
 
+## Tuning `vllm serve` parameters
+
+The [script provided to start vllm server](https://github.com/seungrokj/ai_sprint_paris/blob/cac59feb95236fe764ca2357862c6792d946a816/scripts/1_bench.sh#L30) uses a default configuration. It is likely not optimal, and some vllm server parameters may be tunable (https://github.com/vllm-project/vllm/blob/main/vllm/engine/arg_utils.py).
+
+Similarly, vLLM has some ROCm-specific environment variables that trigger different code paths: https://github.com/vllm-project/vllm/blob/ffe00ef77a540087032aa23222a8c06cb7675994/vllm/envs.py#L646-L723
+
 ## References
 
 ### vLLM
 
 * Documentation: https://docs.vllm.ai/en/latest/
 * ROCm fork of vLLM might have some features on top of upstream vLLM that may give inspiration: https://github.com/rocm/vllm
-* vLLM ROCm-specific environment variables: https://github.com/vllm-project/vllm/blob/ffe00ef77a540087032aa23222a8c06cb7675994/vllm/envs.py#L646-L723
 
 ### AMD Instinct MI300X
 

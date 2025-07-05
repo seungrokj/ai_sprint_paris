@@ -1,5 +1,10 @@
 # Dev Cloud quick start
 
+## ⭐ Step 0
+- Login to the dev cloud
+  
+https://amd.digitalocean.com/
+
 ## ⭐ Step 1
 - Click GPU Droplets
 ![DO_1](./assets/DO_1_n.jpg)
